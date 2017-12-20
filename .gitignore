@@ -1,0 +1,11 @@
+# ignore all data files
+/data/
+
+# ignore all jupyter notebook stuff
+/*.egg-info
+/**/*.egg-info
+/**/__pycache__
+/**/.ipynb_checkpoints
+
+# remove vim temporary swap files
+*.swp
