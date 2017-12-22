@@ -19,4 +19,4 @@ wheels/
 *.egg
 .vector_cache/
 *.py.swp
-*./data/test.csv
+test.csv
