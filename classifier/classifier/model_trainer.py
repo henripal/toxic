@@ -17,7 +17,6 @@ class Trainer:
     def __init__(self, model, optimizer, loss,
                  X, y, batch_size,
                  val_size=0.2, stratify=None,
-                 gpu=False,
                  X_test=None):
         """
         model: model to train
@@ -27,11 +26,12 @@ class Trainer:
         assert X.shape[0] == y.shape[0]
 
         self.model = model
+        if self.model.gpu:
+            model = model.cuda()
         self.optimizer = optimizer
         self.loss = loss
         self.batch_size = batch_size
 
-        self.gpu = gpu
 
         # train/test split
         self.X_train, self.X_val, self.y_train, self.y_val = train_test_split(X,
@@ -69,7 +69,7 @@ class Trainer:
             epoch_losses = []
             self.model.train()
             for X, y in self.train_loader:
-                if self.gpu:
+                if self.model.gpu:
                     X, y = autograd.Variable(X).cuda(), autograd.Variable(y).cuda()
                 else:
                     X, y = autograd.Variable(X), autograd.Variable(y)
@@ -88,7 +88,7 @@ class Trainer:
             val_losses = []
             self.model.eval()
             for X, y in self.val_loader:
-                if self.gpu:
+                if self.model.gpu:
                     X, y = autograd.Variable(X).cuda(), autograd.Variable(y).cuda()
                 else:
                     X, y = autograd.Variable(X), autograd.Variable(y)
