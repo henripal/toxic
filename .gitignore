@@ -22,4 +22,7 @@ wheels/
 test.csv
 submission.csv
 *.csv
+.ropeproject/
+*.pk
+*.pkl
 
