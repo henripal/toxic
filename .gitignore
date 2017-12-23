@@ -21,4 +21,5 @@ wheels/
 *.py.swp
 test.csv
 submission.csv
+*.csv
 
