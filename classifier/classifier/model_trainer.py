@@ -17,7 +17,8 @@ class Trainer:
     def __init__(self, model, optimizer, loss,
                  X, y, batch_size,
                  val_size=0.2, stratify=None,
-                 gpu=False):
+                 gpu=False,
+                 X_test=None):
         """
         model: model to train
         optimizer: chosen optimizer

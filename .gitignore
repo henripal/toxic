@@ -20,3 +20,5 @@ wheels/
 .vector_cache/
 *.py.swp
 test.csv
+submission.csv
+
