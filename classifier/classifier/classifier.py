@@ -34,3 +34,28 @@ def make_submission(lang, model, sub, filename, datapath, comment_types):
     print('done')
     return final
 
+def make_submission_char(lang, model, sub, filename, datapath, comment_types):
+    X_test = lang.encoded_test_sentences
+    X2_test = lang.encoded_test_chars
+    y_empty = torch.zeros(X_test.shape[0])
+    dataset = torchdata.TensorDataset(torch.LongTensor(X_test.astype(int)), y_empty)
+    dataset2 = torchdata.TensorDataset(torch.LongTensor(X2_test.astype(int)), y_empty)
+    loader = torchdata.DataLoader(dataset, batch_size = 256)
+    loader2 = torchdata.DataLoader(dataset2, batch_size = 256)
+    preds = []
+    model.eval()
+
+    print('predicting...')
+    for (X, _), (X2, _) in zip(loader, loader2):
+        X = autograd.Variable(X).cuda()
+        X2 = autograd.Variable(X2).cuda()
+        log_probs = model(X, X2).cpu().data.numpy()
+        preds.append(log_probs)
+    final = np.vstack(preds)
+
+    print('saving file...')
+    sub.loc[:, comment_types] = final
+    sub.to_csv(datapath + filename, index = False)
+    print('done')
+    return final
+
