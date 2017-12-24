@@ -146,7 +146,7 @@ class Language:
                 char_list = []
                 for char in word[:word_len]:
                     ordinal = ord(char)
-                    if ordinal <= 127:
+                    if ordinal < 127:
                         char_list.append(ordinal)
                 if char_list:
                     self.encoded_chars[i, j, :len(char_list)] = np.array(char_list)
@@ -161,8 +161,17 @@ class Language:
             sentence = sentence[:self.max_len]
             for j, word in enumerate(sentence):
                 word_len = min(len(word), self.max_word_len)
-                char_list = list(map(ord, word))[:word_len]
-                self.encoded_test_chars[i, j, :word_len] = np.array(char_list)
+                char_list = []
+                for char in word[:word_len]:
+                    ordinal = ord(char)
+                    if ordinal < 127:
+                        char_list.append(ordinal)
+                if char_list:
+                    self.encoded_test_chars[i, j, :len(char_list)] = np.array(char_list)
+                else:
+                    char_list.append(48)
+                    self.encoded_test_chars[i, j, :len(char_list)] = np.array(char_list)
+        self.encoded_test_chars = self.encoded_test_chars.astype(int)
         self.encoded_chars = self.encoded_chars.astype(int)
 
 

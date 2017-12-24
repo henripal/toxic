@@ -4,6 +4,7 @@ import pandas as pd
 import torch.utils.data as torchdata
 import torch
 import torch.autograd as autograd
+import pdb
 
 def lloss(yhat, y):
     n = yhat.shape[1]
@@ -46,10 +47,10 @@ def make_submission_char(lang, model, sub, filename, datapath, comment_types):
     model.eval()
 
     print('predicting...')
-    for (X, _), (X2, _) in zip(loader, loader2):
-        X = autograd.Variable(X).cuda()
-        X2 = autograd.Variable(X2).cuda()
-        log_probs = model(X, X2).cpu().data.numpy()
+    for (X, y), (X2, _) in zip(loader, loader2):
+        Xc = autograd.Variable(X, volatile=True).cuda()
+        X2c = autograd.Variable(X2, volatile=True).cuda()
+        log_probs = model(Xc, X2c).cpu().data.numpy()
         preds.append(log_probs)
     final = np.vstack(preds)
 
